@@ -33,16 +33,14 @@ def elegir_carrera():
 
 def ver_catalogo():
     print("\n--- CATALOGO DE MATERIAS ---")
-    for codigo in gestor.materias:
-        m = gestor.materias[codigo]
-        cadena = gestor.grafo.contar_cadena(codigo)
+    for m in gestor.arbol.recorrido_inorden():
+        cadena = gestor.grafo.contar_cadena(m.codigo)
         
         estado = "Pendiente"
-        if codigo in gestor.aprobadas:
+        if m.codigo in gestor.aprobadas:
             estado = "APROBADA"
             
         print(f"{m.codigo} | {m.nombre} | Creditos: {m.creditos} | Sem: {m.semestre} | Cadena: {cadena} | {estado}")
-
 def ver_carga():
     print("\n--- MI PROYECCION DE MATRICULA ---")
     if len(carga_actual) == 0:
@@ -58,10 +56,11 @@ def ver_carga():
 def agregar_materia():
     codigo = input("Escribe el codigo de la materia: ").upper().strip()
     
-    if codigo not in gestor.materias:
+    materia = gestor.arbol.buscar(codigo)
+    if materia is None:
         print("Esa materia no existe.")
         return
-
+    
     if codigo in gestor.aprobadas:
         print("Ya aprobaste esa materia.")
         return
@@ -76,7 +75,7 @@ def agregar_materia():
         print("No puedes llevarla. Te falta aprobar:", faltantes)
         return
 
-    materia = gestor.materias[codigo]
+    
     total = 0
     for m in carga_actual:
         total += m.creditos
@@ -100,7 +99,7 @@ def quitar_materia():
 def aprobar_materia():
     codigo = input("Codigo de la materia aprobada: ").upper().strip()
     
-    if codigo not in gestor.materias:
+    if gestor.arbol.buscar(codigo) is None:
         print("Ese codigo no existe.")
         return
 
@@ -123,8 +122,21 @@ def aprobar_materia():
     print("Materia marcada como aprobada.")
     ver_catalogo()
 
+def buscar_materia():
+    codigo = input("Escribe el codigo de la materia a buscar: ").upper().strip()
+    materia = gestor.arbol.buscar(codigo)
+    if materia is None:
+        print("No se encontro esa materia en el arbol.")
+    else:
+        print(f"Encontrada: {materia.codigo} - {materia.nombre} | Creditos: {materia.creditos} | Semestre: {materia.semestre}")
+
 def simular_recomendacion():
-    promedio = float(input("Ingresa tu promedio (0 a 100): "))
+    try:
+        promedio = float(input("Ingresa tu promedio (0 a 100): "))
+    except ValueError:
+        print("Error: Ingresa un numero valido.")
+        return
+
     recomendadas, max_cred = gestor.recomendar_carga(promedio)
     
     carga_actual.clear()
@@ -146,6 +158,7 @@ while True:
     print("5. Marcar materia como aprobada")
     print("6. Simular recomendacion de carga")
     print("7. Cambiar de carrera")
+    print("8. Buscar materia por codigo")
     print("0. Salir")
 
     opcion = input("Elige una opcion: ")
@@ -164,6 +177,8 @@ while True:
         simular_recomendacion()
     elif opcion == "7":
         elegir_carrera()
+    elif opcion == "8":
+        buscar_materia()
     elif opcion == "0":
         print("Programa terminado.")
         break
