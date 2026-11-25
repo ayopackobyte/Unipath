@@ -208,6 +208,25 @@ def recomendar():
 
     return redirect(url_for("index"))
 
+@app.route("/buscar", methods=["POST"])
+def buscar():
+
+    global mensaje
+
+    codigo = request.form.get("codigo", "").strip().upper()
+
+    if not codigo:
+        mensaje = "Aviso: Ingresa un codigo para buscar."
+        return redirect(url_for("index"))
+
+    materia = gestor.arbol.buscar(codigo)
+
+    if materia is not None:
+        mensaje = f"Arbol Binario: {materia.codigo} - {materia.nombre} ({materia.creditos} cred., Semestre {materia.semestre})."
+    else:
+        mensaje = f"Arbol Binario: No se encontro la materia {codigo}."
+
+    return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)
