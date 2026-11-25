@@ -1,10 +1,12 @@
 from modelos import Asignatura
+from arbol import ArbolMaterias
 from grafo import Grafo
 
 
 class Gestor:
 
     def __init__(self):
+        self.arbol = ArbolMaterias()
         self.carreras = {}
         self.facultades = {}
 
@@ -920,7 +922,7 @@ class Gestor:
         Asignatura("MD2", "Materiales Dentales II", 4, 4),
         Asignatura("SG", "Semiología", 4, 4),
         Asignatura("HB", "Histoembriología Bucodental", 4, 4),
-        Asignatura("MO", "Microbiología Oral", 4, 4),
+        Asignatura("MO1", "Microbiología Oral", 4, 4),
         Asignatura("O1", "Oclusión I", 4, 4),
         Asignatura("B1+CE", "B1+ Communicative English", 3, 5),
         Asignatura("AG", "Anestesiología", 4, 5),
@@ -936,7 +938,7 @@ class Gestor:
         Asignatura("P1", "Periodoncia I", 4, 6),
         Asignatura("FO", "Farmacología Odontológica", 4, 6),
         Asignatura("CO1", "Cirugía Oral I", 4, 6),
-        Asignatura("MO", "Medicina Oral", 4, 6),
+        Asignatura("MO2", "Medicina Oral", 4, 6),
         Asignatura("ES", "Emprendedores", 3, 7),
         Asignatura("PO2", "Patología Oral II", 4, 7),
         Asignatura("PDDPPF", "Preclínica de Prótesis Parcial Fija", 4, 7),
@@ -944,7 +946,7 @@ class Gestor:
         Asignatura("CO2", "Cirugía Oral II", 4, 7),
         Asignatura("PDE", "Preclínica de Endodoncia", 4, 7),
         Asignatura("OD2", "Operatoria Dental II", 4, 7),
-        Asignatura("PDO", "Preclínica de Odontopediatría", 4, 8),
+        Asignatura("PDOI", "Preclínica de Odontopediatría", 4, 8),
         Asignatura("PDPDT", "Preclínica de Prótesis Total", 4, 8),
         Asignatura("PDDPPR", "Preclínica de Prótesis Parcial Removible", 4, 8),
         Asignatura("CM1", "Clínica Multidisciplinaria I", 4, 8),
@@ -989,8 +991,8 @@ class Gestor:
         grafo_odontologia.agregar_relacion("P1", "P2")
         grafo_odontologia.agregar_relacion("CO1", "CO2")
         grafo_odontologia.agregar_relacion("CO2", "CO3")
-        grafo_odontologia.agregar_relacion("PDOP", "CDOP")
-        grafo_odontologia.agregar_relacion("PDOR", "CDOR")
+        grafo_odontologia.agregar_relacion("PDOI", "CDO1")
+        grafo_odontologia.agregar_relacion("PDO", "CDO2")
         grafo_odontologia.agregar_relacion("PDPDT", "CDPT")
         grafo_odontologia.agregar_relacion("PDDPPR", "CDPPR")
         grafo_odontologia.agregar_relacion("CM1", "CM2")
@@ -1821,7 +1823,7 @@ class Gestor:
 
         }
 
-     
+
         self.seleccionar_carrera("Ingenieria en Sistemas")
 
     def seleccionar_carrera(self, nombre_carrera):
@@ -1833,6 +1835,11 @@ class Gestor:
                 self.materias = self.carreras[clave]["materias"]
                 self.grafo = self.carreras[clave]["grafo"]
                 self.aprobadas = []
+
+                self.arbol = ArbolMaterias()
+                for m in self.materias.values():
+                    self.arbol.insertar(m)
+
                 return True
 
         return False
