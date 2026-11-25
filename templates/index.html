@@ -288,7 +288,7 @@
 
         <div class="card">
 
-            <h3>Mi Proyección ({{ total_creditos }} / 18 créd.)</h3>
+            <h3>Mi Proyección ({{ total_creditos }} / 20 créd.)</h3>
 
             {% if carga_actual %}
 
@@ -345,7 +345,25 @@
                 </button>
 
             </form>
+            <hr style="margin: 20px 0;">
 
+                <h4>Buscar Materia (Árbol)</h4>
+
+                     <form action="/buscar" method="POST">
+
+                <input
+                    type="text"
+                    name="codigo"
+                    placeholder="Ej. IP101"
+                    required
+                    style="padding: 6px; width: 140px;"
+                >
+
+                <button type="submit" class="btn btn-azul" style="border: none; cursor: pointer; padding: 7px 12px;">
+                    Buscar
+                </button>
+
+            </form>
         </div>
 
     </div>
