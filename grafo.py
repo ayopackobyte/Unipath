@@ -25,10 +25,14 @@ class Grafo:
             self.prerrequisitos[materia_despues].append(materia_antes)
         
     def puede_matricular(self, codigo, aprobadas):
+        if codigo not in self.prerrequisitos:
+            return False, []
         faltantes = []
         for req in self.prerrequisitos[codigo]:
-           if req not in aprobadas:
+            if req not in aprobadas:
                 faltantes.append(req)
+
+        return len(faltantes) == 0, faltantes
 
         return len(faltantes) == 0, faltantes
         
